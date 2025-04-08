@@ -27,20 +27,24 @@ Ein Handspiel liegt vor, wenn der Ball nachweislich seine Flugbahn verändert un
 dabei Kontakt mit einer Handfläche oder einem Arm hat.
 
 .LP
-Die Erkennung basiert auf folgenden Schritten:
-.IP \[bu]
-.B Objekerkennung
-von Ball und Hand (mittels YOLOv8),
+Die Analyse & Erkennung basiert auf folgenden Schritten:
 .IP \[bu]
 .B Verfolgung
-der Ballflugbahn durch lineare Regression,
+der Ballflugbahn (OpenCV) und Berechnung durch lineare Regression,
+.IP \[bu]
+.B Objekterkennung
+von Ball und Hand (YOLO)
 .IP \[bu]
 .B Vergleich
 zwischen erwarteter und tatsächlicher Flugbahn.
 
 .LP
-Bei signifikanten Abweichungen in Verbindung mit einem Kontakt zur Hand soll das
-System ein Handspiel erkennen.
+Bei signifikanten Abweichungen der kalkulierten und ermittelten Ballflugbahn,
+wird die Objekterkennung aktiviert. Hierbei wird die Position der nächsten Hand
+sowie des Balls erfasst und deren Abstand zum Zeitpunkt der signifikanten Abweichung
+berechnet. Ist Abstand zwischen Hand und Ball unter ein Minimum, so liegt ein
+Handspiel vor.
+
 .NH
 Projektphasen
 .LP
@@ -56,7 +60,7 @@ SoccerNet (500+ Spiele, Fokus auf Replays/Nahaufnahmen),
 Youtube (z. B. Sportschau-Zusammenfassungen).
 .IP \[bu]
 .B "Tools" :
-yt-dlp, SoccerNetDownloader (Python), eigener Scraper.
+yt-dlp, SoccerNetDownloader (Python)
 .NH 2
 Datenaufbereitung
 .IP \[bu]
@@ -88,30 +92,34 @@ Identifikation abrupter Flugbahnabweichungen.
 .IP \[bu]
 Optional: Analyse der Körperhaltung (abgestreckter Arm).
 .RE
+.IP \[bu]
+.B "Tool" :
+OpenCV
 .PS
 arrowhead = 0
-box "Objekt-" "erkennung"
-arrow
 box "Ball-" "tracking"
 arrow
-Val: box "Validierung" "Flugkurve"
+box "Validierung" "Flugkurve"
+arrow
+Obj_Det: box "Objekt-" "erkennung"
 Pose: move right 1.2; box wid 1.2i "Körperhaltung" "(abgestreckter Arm)" dashed
-arrow from Val.e to Pose.w dashed "optional" above
+arrow from Obj_Det.e to Pose.w dashed "optional" above
 .PE
+.bp
 .NH 2
 Training
 .IP \[bu]
 .B "Ziel" :
-Finetuning eines bestehenden YOLOv8-Modells mit eigenen, gelabelten Daten.
+Extrahieren der Daten aus einem YOLO-Model, zusätzliches eigenes Erstellen von gelabelten Daten.
 .IP \[bu]
 .B "Vorgehen" :
 .RS
 .IP \[bu]
 Import der gelabelten Bilder.
 .IP \[bu]
-Modelltraining mit Fokus auf Erkennung von Ball und Hand.
+Fokus auf Erkennung von Ball und Hand.
 .IP \[bu]
-Balltracking über Bildsequenzen hinweg zur Flugbahnermittlung.
+Ballverfolgung über Bildsequenzen hinweg zur Flugbahnermittlung.
 .RE
 .NH 2
 Evaluation
@@ -162,8 +170,8 @@ Abschluss:03.06 \[-] 16.06:Denis Maric, Chris Kiriakou
 .TE
 .PP
 .B "Hinweis" :
-Die benannte Zuständige Person führt jeweils die Hauptverantwortung in der
-Phase, Teamarbeit und Austausch finden übergreifend statt. Der
+Die benannte Zuständige Person führt jeweils die Hauptverantwortung in dieser
+Phase, Teamarbeit und Austausch finden übergreifend statt. Die
 Verantwortlichkeit schließt die andere Person natürlich
 .B "nicht"
 von der jeweiligen Phase aus.
@@ -195,7 +203,6 @@ Ausbilck
 .LP
 Bei Fortführung des Projekts könnte ebenfalls die Körperhaltung (abgestreckter
 Arm) analysiert werden um noch genauer in der Auswertung zu werden.
-.bp
 .NH
 Systemstruktur
 .PP
