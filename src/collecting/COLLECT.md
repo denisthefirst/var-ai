@@ -78,5 +78,5 @@ from overwriting files with the same name.
 After adding videos to the collection, run the script:
 
 ``` sh
-python src/collect/collect.py
+python src/collecting/collect.py
 ```
