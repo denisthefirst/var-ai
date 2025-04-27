@@ -10,8 +10,8 @@ and recognizes whether a handball has occurred.
  
 ## Documentation
 
-Project documentation is located in `docs/`:
 * [Projectplan](docs/project-plan/PROJ_PLAN.md): Roadmap from start to finish.
+* [Collect](src/collecting/COLLECT.md) module: A convinence script to download clips required for machine learning.
 
 ----
 
