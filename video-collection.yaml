@@ -18,6 +18,21 @@
   - title: "side"
     url: "https://www.youtube.com/watch?v=GZXNfRqIQuo&t=299s"
     duration: 4
+  - title: "foul-zoomed-in"
+    url: "https://youtu.be/GZXNfRqIQuo&t=36s"
+    duration: 4
+  - title: "header-slow-motion"
+    url: "https://youtu.be/GZXNfRqIQuo&t=80s"
+    duration: 7
+  - title: "can-vs-yamal-slow-motion"
+    url: "https://youtu.be/GZXNfRqIQuo&t=91s"
+    duration: 4
+  - title: "yamal-vs-musiala"
+    url: "https://youtu.be/GZXNfRqIQuo&t=134s"
+    duration: 7
+  - title: "wirtz"
+    url: "https://youtu.be/GZXNfRqIQuo&t=274s"
+    duration: 6
 
 - title: "augsburg-vs-bremen-buli"
   sections:
