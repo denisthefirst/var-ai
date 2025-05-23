@@ -30,7 +30,7 @@ dabei Kontakt mit einer Handfläche oder einem Arm hat.
 Die Analyse & Erkennung basiert auf folgenden Schritten:
 .IP \[bu]
 .B Verfolgung
-der Ballflugbahn (OpenCV) und Berechnung durch lineare Regression,
+der Ballflugbahn (OpenCV)
 .IP \[bu]
 .B Objekterkennung
 von Ball und Hand (YOLO)
