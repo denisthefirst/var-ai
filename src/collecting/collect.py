@@ -1,5 +1,4 @@
 import os
-import re
 import yaml
 import yt_dlp
 from yt_dlp.utils import download_range_func
@@ -7,23 +6,24 @@ from yt_dlp.utils import download_range_func
 script_dir = os.path.dirname(__file__)
 proj_root_dir = os.path.join(script_dir, '..', '..')
 video_collection_path = os.path.join(proj_root_dir, 'video-collection.yaml')
-video_download_path = os.path.join(proj_root_dir, 'data', 'raw')
+video_download_path = os.path.join(proj_root_dir, 'data', 'videos')
 titles: dict = {}
 downloaded_files: list = []
 
 
-def scan_download_dir() -> list:
+def get_all_files(path) -> list:
     """
     This function returns all filenames inside the download
     directory.
 
     :returns: A list with filenames and file extension.
     """
-    try:
-        return os.listdir(video_download_path)
-    except Exception as e:
-        print(f"Error reading download directory: {e}")
-        return []
+    all_files = []
+    for dirpath, dirnames, filenames in os.walk(path):
+        for file in filenames:
+            full_path = os.path.join(dirpath, file)
+            all_files.append(full_path)
+    return all_files
 
 
 def file_already_exists(filename: str) -> bool:
@@ -33,36 +33,26 @@ def file_already_exists(filename: str) -> bool:
     :param filename: The filename to check for.
     :returns: Boolean value based on avaliablity of given file.
     """
+
     if filename in downloaded_files:
         return True
     else:
         return False
 
 
-def extract_url_and_start(url_start: str) -> tuple:
+def timestamp_to_seconds(timestamp: str) -> int:
     """
-    Extract the video URL and starting time stamp from a
-    given URL.
-        Example: 
-        `https://www.youtube.com/watch?v=f5M9mzcjZ_8&t=7890s` is the 
-        `url_start` variable, here `7890` is the starting timestamp, and
-        `https://www.youtube.com/watch?v=f5M9mzcjZ_8` the URL of the video
+    Convert a timestamp "hh:mm:ss" to seconds.
+    Example: 02:11:30 is 7890 seconds.
 
-    :param url_start: The combination of video url and timestamp.
-    :returns touple: A touple with the video URL and its starting time.
+    :param timestamp: A timestamp of format "hh:mm:ss"
+    :returns touple: A integer representing the timestamp in seconds.
     """
-    try:
-        match_start_time = re.search(r"&t=(\d+(?:\.\d+)?)s", url_start)
-        if match_start_time:
-            start_time = round(float(match_start_time.group(1)), 2)
-        url = re.sub(r"&t=\d+s", "", url_start)
-        return (f"{url}", start_time)
-    except Exception as e:
-        print(f"Failed to extract URL and start time from {url_start}: {e}")
-        return (url_start, 0.0)
+    h, m, s = map(int, timestamp.split(':'))
+    return h * 3600 + m * 60 + s
 
 
-def download_video(video_title: str,
+def download_video(video_dir: str,
                    video_url: str,
                    section_title: str,
                    start_time: float,
@@ -84,17 +74,15 @@ def download_video(video_title: str,
 
     # Add a counter to the section title if the same section title
     # already exists, this prevents overriding files
-    if f"{video_title}-{section_title}" in titles:
-        titles[f"{video_title}-{section_title}"] += 1
-        suffix = titles[f"{video_title}-{section_title}"]
+    if section_title in titles:
+        titles[section_title] += 1
+        suffix = titles[section_title]
         section_title = f"{section_title}-{suffix}"
     else:
-        titles[f"{video_title}-{section_title}"] = 0
+        titles[section_title] = 0
 
-    filename: str = f"{video_title}-{section_title}"
-
-    if not file_already_exists(f"{filename}.mp4"):
-        output = os.path.join(video_download_path, filename)
+    if not file_already_exists(f"{section_title}.mp4"):
+        output = os.path.join(video_dir, section_title)
 
         ydl_opts: dict = {
             'verbose': False,
@@ -123,11 +111,10 @@ def collect_videos() -> None:
     """
 
     global downloaded_files
-    # Write all filenames from the download directory to a list,
-    # This list is later used to determine if a video has already been
-    # downloaded. This allows adding new videos to the collection
+    # Get files from the download directory.
+    # This allows adding new videos to the collection
     # without having to download them again.
-    downloaded_files = scan_download_dir()
+    downloaded_files = get_all_files(video_download_path)
    
     try:
         with open(video_collection_path, "r") as file:
@@ -135,21 +122,19 @@ def collect_videos() -> None:
     except Exception as e:
         print(f"Failed to load video collection YAML: {e}")
         return
-    
+    if video_download_path not in downloaded_files:
+        os.mkdir(video_download_path) 
     for video in video_collection:
         video_title: str = video["title"]
-        print(f"Video with title: \"{video_title}\", contains the following sections:")
+        video_dir: str = os.path.join(video_download_path, video_title)
+        if video_dir not in downloaded_files:
+            os.mkdir(video_dir)
+        video_url: str = video["url"]
         for section in video["sections"]:
             section_title: str = section["title"]
-            url_start: tuple = extract_url_and_start(section["url"])
-            url: str = url_start[0]
-            start_time: float = url_start[1]
-            end_time: float = start_time + round(float(section["duration"]), 2)
-            print(f"\tSection: \"{section_title}\"")
-            print(f"\t\turl_start: \"{url_start}\"")
-            print(f"\t\tend_time: \"{end_time}\"")
-            download_video(video_title, url, section_title, start_time, end_time)
-        print("\n")
+            start_time: int = timestamp_to_seconds(section["start"])
+            end_time: int = timestamp_to_seconds(section["end"])
+            download_video(video_dir, video_url, section_title, start_time, end_time)
 
 
 def main():

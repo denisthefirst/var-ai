@@ -22,7 +22,7 @@ def detect_object_in_video(video_path, output_path, save_output=True):
     Returns:
         results: The results from the YOLO model, typically including detected objects, their locations, and confidence scores.
     """
-    model_path = f"{proj_root_dir}/models/pretrained/yolo11n.pt"
+    model_path = f"{proj_root_dir}/models/pretrained/yolo11s.pt"
     model = YOLO(model_path)
     results = model(video_path, save=save_output, project=output_path)
     return results

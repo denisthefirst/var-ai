@@ -1,93 +1,37 @@
-- title: "uruguay-vs-ghana-fifa-wc-2010"
+- title: "uru-gha-fifa-wc-10"
+  url: "https://www.youtube.com/watch?v=f5M9mzcjZ_8"
   sections:
-  - title: "top" 
-    url: "https://www.youtube.com/watch?v=f5M9mzcjZ_8&t=7890s" 
-    duration: 15
-  - title: "side" 
-    url: "https://www.youtube.com/watch?v=f5M9mzcjZ_8&t=7905s" 
-    duration: 6
-  - title: "front" 
-    url: "https://www.youtube.com/watch?v=f5M9mzcjZ_8&t=7911s" 
-    duration: 6
+  - title: "suarez-hand-top"
+    start: "02:11:30" 
+    end: "02:11:45"
+  - title: "suarez-hand-side"
+    start: "02:11:45" 
+    end: "02:11:51" 
+  - title: "suarez-hand-front"
+    start: "02:11:51" 
+    end: "02:11:57" 
 
-- title: "germany-vs-spain-uefa-euro-2024"
+- title: "ger-esp-uefa-eu-24"
+  url: "https://www.youtube.com/watch?v=GZXNfRqIQuo"
   sections:
-  - title: "front"
-    url: "https://www.youtube.com/watch?v=GZXNfRqIQuo&t=295s"
-    duration: 4
-  - title: "side"
-    url: "https://www.youtube.com/watch?v=GZXNfRqIQuo&t=299s"
-    duration: 4
-
-- title: "augsburg-vs-bremen-buli"
-  sections:
-  - title: "slow-motion"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=29s"
-    duration: 4
-  - title: "super-slow-motion"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=33.8s"
-    duration: 5.2
-
-- title: "wolfsburg-vs-munich-buli"
-  sections:
-  - title: "top"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=61.3s"
-    duration: 5
-  - title: "side"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=65.3s"
-    duration: 5
-  - title: "opp-side"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=75s"
-    duration: 5
-
-- title: "heidenheim-vs-augsburg-buli"
-  sections:
-  - title: "side-top-realtime"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=92s"
-    duration: 3
-  - title: "behind-goal-realtime"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=96s"
-    duration: 3
-  - title: "side-bottom"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=99s"
-    duration: 5
-  - title: "side-bottom-zoom-slow-motion"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=104s"
-    duration: 6
-  - title: "side-bottom-zoom-super-slow-motion"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=112s"
-    duration: 4
-
-- title: "munich-vs-freiburg-buli"
-  sections:
-  - title: "side-top-realtime"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=132s"
-    duration: 4
-  - title: "side-zoom-super-slow-motion"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=136s"
-    duration: 4
-  - title: "side-bot-realtime"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=141s"
-    duration: 3
-  - title: "side-opp-bot-super-slow-motion"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=143s"
-    duration: 5
-  - title: "side-opp-top-super-slow-motion"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=152s"
-    duration: 3
-  - title: "side-opp-top-super-realtime-2nd-sit"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=169.5s"
-    duration: 4.5
-  - title: "back-top-super-slow-motion-2nd-sit"
-    url: "https://www.youtube.com/watch?v=kPyC4VLHnyA&t=174s"
-    duration: 5
-
-- title: "st-pauli-vs-bayer-buli"
-  sections:
-  - title: "side-goal"
-    url: "https://youtu.be/KnGU_PDTaQQ&t=327s"
-    duration: 7.5
-  - title: "side-top-opp"
-    url: "https://youtu.be/KnGU_PDTaQQ&t=336s"
-    duration: 6
-
+  - title: "cucurella-hand-front"
+    start: "00:04:55"
+    end: "00:04:59"
+  - title: "cucurella-hand-side"
+    start: "00:04:59"
+    end: "00:05:03"
+  - title: "gross-foul"
+    start: "00:00:36"
+    end: "00:00:40"
+  - title: "havertz-header"
+    start: "00:01:20"
+    end: "00:01:27"
+  - title: "can-foul"
+    start: "00:01:31"
+    end: "00:01:35"
+  - title: "yamal-pass"
+    start: "00:02:14"
+    end: "00:02:21"
+  - title: "wirtz-goal"
+    start: "00:04:34"
+    end: "00:04:40"
