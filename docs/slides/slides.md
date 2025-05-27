@@ -204,7 +204,7 @@ Testen der Objekterkennung an unserem Szenario:
 ```
 yolo task=detect mode=predict model=./models/ball-detection.pt source=./data/raw/videos/cucurella-hand-play.mp4 conf=0.7
 ```
-* Confidence: `0.7` entnommen aus F1-Score
+* Confidence: `0.7`, entnommen aus F1-Score
 * Erkennung des Balls bei 90% aller validierten Daten mit einer Genauigkeit von 70%
 
 <!--
@@ -220,9 +220,10 @@ Testen des Models am Szenario Clip (mit Confidence) - Erkenntnis: Nur Ball wird 
 
 ----
 
-# Tracking mit OpenCV: Prüfen nach erkannten Objekten
+# Tracking mit OpenCV: Nach Objekten prüfen
  
-Über alle Frames des Videos wird iteriert & Geprüft ob Objekte erkannt wurden:
+- Über alle Frames des Videos iterieren
+- Prüfen ob Objekte erkannt wurden
 ```python
 # Ret is boolean value, frame is an actual image
 ret, frame = cap.read() 
@@ -232,8 +233,8 @@ out.write(frame)
 # Checks if there are any boxes saved
 if results[0].boxes is not None: 
     boxes = results[0].boxes 
-    if hasattr(boxes, 'cls'): 
-        class_names = results[0].names 
+    if hasattr(boxes, 'cls'):
+        class_names = results[0].names
         for i, cls_id in enumerate(boxes.cls): 
             cls_id = int(cls_id) 
             class_name = class_names[cls_id] 
@@ -241,7 +242,7 @@ if results[0].boxes is not None:
 
 ----
 
-# Tracking mit OpenCV: Erfassung der Position
+# Tracking mit OpenCV: Position Erfassen 
  
 Enthält der Erkannte Frame eine Klasse `sports ball`, so wird...
 - die Position erfasst
@@ -265,14 +266,15 @@ if class_name == 'sports ball':
 
 ----
 
-# Tracking mit OpenCV: Speichern der Ballflugbahn 
+# Tracking mit OpenCV: Ballflugbahn speichern
 
-- Speichern der einzelnen Punkte in in einer Flugbahn Liste
-- Aufzeichnen der Flugbahn
+- Speichern der einzelnen Punkte in in einer Liste
+- Zeichnen der Flugbahn
 ```python
 # Add point to trajectory
 if track_id not in ball_trajectories:
     ball_trajectories[track_id] = []
+    
 ball_trajectories[track_id].append((center_x, center_y))
 # Draw trajectory line
 if len(ball_trajectories[track_id]) > 1:
@@ -287,10 +289,12 @@ if len(ball_trajectories[track_id]) > 1:
 
 # Fazit
 
-- Unternehmen müssen flexibel auf neue Herausforderungen reagieren
-- Alternative Transportwege und diversifizierte Lieferanten sind entscheidend
-- Gesetzliche Rahmenbedingungen erfordern schnelle Anpassungen
-- Nachhaltige Innovationen stärken langfristig die Widerstandsfähigkeit globaler Lieferketten
+* Beispielszenario funktioniert gut, uneindeutigere Szenen eher nicht
+* Handspiel ist auch immer Ermessenssache des Schiedsrichters
+* Beabsichtigtes/Unbeabsichtigtes Handspiel
+* Erweiterungen:
+    * Entfernung Arm zu Körper
+    * Analyse ob ein absichtliches Handspiel vorliegt
 
 ----
 
