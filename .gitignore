@@ -180,3 +180,6 @@ data/*
 # Documentation build artefacts
 *.pdf
 *.ps
+
+# Assets dir
+docs/slides/assets/
