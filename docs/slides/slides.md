@@ -26,8 +26,6 @@ style: |
 ## Data Science
 Denis Maric & Chris Kiriakou
 
-![bg cover](./assets/world.gif)
-
 <style scoped>
 h1 {
     font-size: 80px;
@@ -54,7 +52,7 @@ header {
 
 ----
 
-![bg](./assets/cucurella-hand-play.gif)
+![bg](./assets/var-ai-szenario-intro.gif)
 
 <style scoped>
 header {
@@ -70,8 +68,6 @@ Musiala und Cucurella Clip in groß über die gesammte Folie
 
 # Gliederung
 
-![bg contain right:33%](/home/chris/pics/screenshots/risk-landscape.png)
-
 1. Einführung
 2. Labeln mit Label-Studio
 3. Google Colab
@@ -82,8 +78,13 @@ Musiala und Cucurella Clip in groß über die gesammte Folie
 8. Fazit 
 
 <!-- paginate: true -->
+
 <!--
-Notizen:
+Es können noch Bilder hinzugefügt werden, damit Folie etwas anschaulicher ist!
+
+Mögliche Einteilung:
+1. - 4. Chris
+5. - 8. Denis
 -->
 ---
 
@@ -157,13 +158,13 @@ drive.mount('/content/drive')
 
 ----
 
-# ![height:40px](./assets/yolo.svg) YOLOv11 Finetuning
+# ![height:40px](./assets/yolo.svg) YOLO11 Finetuning
  
 <div class="columns">
 <div>
  
 - **Finetuning**:
-    - Verwendetes Model: YOLOv11s
+    - Verwendetes Model: YOLO11s
     - Model besitzt bereits vortrainierte Gewichtungen (COCO Datensatz)
     - Gewichtungen mit eigenem Datensatz anpassen
 - Split: 80/20 Traings-/Validierungsdaten 
@@ -186,7 +187,7 @@ val: images/val
 
 ----
 
-# Finetuning
+# ![height:40px](./assets/yolo.svg) YOLOv11 Finetuning in ![height:40px](./assets/googlecolab.svg) Google Colab
 
 <div class="columns">
 <div>
@@ -212,17 +213,17 @@ model = YOLO(MODEL)
 model = model.to(device)
 model.train(
     data=DATASET_CONFIGURATION_PATH,
-    imgsz=IMAGE_SIZE,
-    batch=BATCH_SIZE,
+    imgsz=1280,
+    batch=-1,
     device=device,
-    freeze=FREEZE,
-    lr0=LEARNING_RATE,
+    freeze=10,
+    lr0=0.005,
     project=OUTPUT_DIR,
-    patience=PATIENCE,
-    epochs=EPOCHS,
-    cache=CACHE,
-    seed=SEED,
-    plots=PLOTS,
+    patience=10,
+    epochs=60,
+    cache=True,
+    seed=42,
+    plots=True,
     name=NAME)
 ```
 
@@ -483,16 +484,37 @@ for _, row in frame_points.iterrows():
 
 ----
 
-> Considering the contact with the ball happened as he was moving his hand toward his body (which was in a vertical position), and he wasn’t deliberately trying to make his body unnaturally bigger, it indicated that Cucurella did not intend to stop the ball with his hand. Hence, due to the vertical position of his hand, the penalty wasn’t awarded.
-
-----
-
 # Vielen Dank für's zuhören!
  
 <!-- paginate: false -->
 
+<!--
+Vielleicht noch etwas hinzufügen, Name und Bilder von uns. Wird am Ende der Präsentation immer gern gesehen.
+-->
 ----
 
 # Quellen
 
-*
+- Datensatz (1408 labled Bilder) [https://drive.google.com/drive/folders/1h9DUoNAdYnxkmZG605bA3RJbBkVvsU0-?usp=drive_link](https://drive.google.com/drive/folders/1h9DUoNAdYnxkmZG605bA3RJbBkVvsU0-?usp=drive_link)
+- Fine-Tune Notebook (Google Colab) [https://colab.research.google.com/drive/1E4L6ZLPrKpIl-WGFn52tqyORbYHB6ulE?usp=sharing](https://colab.research.google.com/drive/1E4L6ZLPrKpIl-WGFn52tqyORbYHB6ulE?usp=sharing)
+- VAR-AI GitHub Repository [https://github.com/denisthefirst/var-ai](https://github.com/denisthefirst/var-ai)
+- Ultralytics YOLO11 [https://docs.ultralytics.com/models/yolo11/](https://docs.ultralytics.com/models/yolo11/)
+- Ultralytics YOLO11 Pose-Estimation [https://www.ultralytics.com/blog/how-to-use-ultralytics-yolo11-for-pose-estimation](https://www.ultralytics.com/blog/how-to-use-ultralytics-yolo11-for-pose-estimation)
+- YOLO Fine-Tuning [https://docs.ultralytics.com/guides/model-evaluation-insights/](https://docs.ultralytics.com/guides/model-evaluation-insights/)
+- YOLO Train-Settings [https://docs.ultralytics.com/modes/train/#train-settings](https://docs.ultralytics.com/modes/train/#train-settings)
+- Ultralytics YOLO Logo [https://cdn.prod.website-files.com/646dd1f1a3703e451ba81ecc/64994922cf2a6385a4bf4489_UltralyticsYOLO_mark_blue.svg](https://cdn.prod.website-files.com/646dd1f1a3703e451ba81ecc/64994922cf2a6385a4bf4489_UltralyticsYOLO_mark_blue.svg)
+- Label-Studio, Label-Studio Logo [https://labelstud.io/](https://labelstud.io/)
+- Google Colab Logo [https://simpleicons.org/?q=colab](https://simpleicons.org/?q=colab)
+- Videos, Bilder (Fußballszenen): [https://www.youtube.com/watch?v=GZXNfRqIQuo](https://www.youtube.com/watch?v=GZXNfRqIQuo)
+- Präsentationsframework: [https://marp.app/](https://marp.app/)
+- RDP-Algorithmus
+
+<!--
+Bitte fehlende Quellen hinzufügen
+-->
+ 
+<style scoped>
+li {
+    font-size: 14px;
+}
+</style>
