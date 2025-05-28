@@ -12,6 +12,13 @@ style: |
   li, p, td, th {
     font-size: 26px;
   }
+  .columns {
+    display: flex;
+    gap: 1rem;
+  }
+  .columns > div {
+    flex: 1 1 0;
+  }
 
 ----
 
@@ -22,7 +29,6 @@ Denis Maric & Chris Kiriakou
 ![bg cover](./assets/world.gif)
 
 <style scoped>
-
 h1 {
     font-size: 80px;
     text-align: center;
@@ -44,7 +50,6 @@ section {
 header {
     color: #FFFFFF00;
 }
-
 </style>
 
 ----
@@ -69,11 +74,12 @@ Musiala und Cucurella Clip in groß über die gesammte Folie
 
 1. Einführung
 2. Labeln mit Label-Studio
-3. YOLO Finetuning in Google Colab
-4. Ballerfassung mit OpenCV
-5. Detektierung der Flugbahnänderung
-6. Handspielerkennung
-7. Fazit 
+3. Google Colab
+4. YOLO Finetuning
+5. Ballerfassung mit OpenCV
+6. Detektierung der Flugbahnänderung
+7. Handspielerkennung
+8. Fazit 
 
 <!-- paginate: true -->
 <!--
@@ -134,7 +140,7 @@ section:after {
 
 ![bg right:27% vertical height:40%](./assets/imgsz.svg)
 
-# Google Colab
+# ![height:40px](./assets/googlecolab.svg) Google Colab
  
 **Warum Colab?** GPU im Training signifikant schneller als CPU
 
@@ -151,11 +157,20 @@ drive.mount('/content/drive')
 
 ----
 
-# YOLO Finetuning in Google Colab
+# ![height:40px](./assets/yolo.svg) YOLOv11 Finetuning
  
-- Finetuning:Model wird mit eigenen Daten erweitert (Einfrieren innerer Schichten)
+<div class="columns">
+<div>
+ 
+- **Finetuning**:
+    - Verwendetes Model: YOLOv11s
+    - Model besitzt bereits vortrainierte Gewichtungen (COCO Datensatz)
+    - Gewichtungen mit eigenem Datensatz anpassen
 - Split: 80/20 Traings-/Validierungsdaten 
   
+</div>
+<div>
+
 Konfigurationsdatei für YOLO Datensatz:
 ```yaml
 names:
@@ -166,13 +181,15 @@ train: images/train
 val: images/val
 ```
 
-<!--
-Seite noch etwas leer
--->
+</div>
+</div>
 
 ----
 
-# YOLO Finetuning in Google Colab
+# Finetuning
+
+<div class="columns">
+<div>
 
 Trainingsparameter:
 - **YOLO-Model**: `yolo11s.pt`
@@ -180,6 +197,9 @@ Trainingsparameter:
 - **Bildgröße**: größer = weniger Informationsverlust `imgsz = 1280`
 - **Batchgröße**: Passende für geg. Hardware auswählen `batch = -1`
 - **Freezing**: Hidden-Layer *einfrieren* `freeze = 10`
+ 
+</div>
+<div>
 
 Model auf GPU trainieren:
 ```python 
@@ -187,20 +207,27 @@ import torch
 from ultralytics import YOLO
 
 device = torch.device('cuda' if torch.cuda.is_available() else exit)
+
 model = YOLO(MODEL)
 model = model.to(device)
+model.train(
+    data=DATASET_CONFIGURATION_PATH,
+    imgsz=IMAGE_SIZE,
+    batch=BATCH_SIZE,
+    device=device,
+    freeze=FREEZE,
+    lr0=LEARNING_RATE,
+    project=OUTPUT_DIR,
+    patience=PATIENCE,
+    epochs=EPOCHS,
+    cache=CACHE,
+    seed=SEED,
+    plots=PLOTS,
+    name=NAME)
 ```
 
-<!--
-Evtl. zusätzliche Folie
-
-----
-![bg 80%](./assets/var-ai-train-batch-1.jpg)
-![bg 80%](./assets/var-ai-train-batch-2.jpg)
--->
-<!--
-Trainingsergebnisse (Plots) einfügen Trainings- & Validierungs-Batch (mit Label)
--->
+</div>
+</div>
 
 ----
 
@@ -253,42 +280,43 @@ keine Bälle mehr erkannt.
 
 ----
 
-# Tracking mit OpenCV: Nach Objekten prüfen
- 
+# Tracking mit OpenCV
+
+<div class="columns">
+<div>
+
+Objekterkennung mit Finetuned YOLO Model:
 - Über alle Frames des Videos iterieren
 - Prüfen ob Objekte erkannt wurden
+ 
+<br>
+
+Enthält der erkannte Frame `sports ball`:
+- Erfassen der Position mit OpenCV
+- Berechnen des Ballmittelpunkts
+- Speichern der Koordinaten in Liste
+
+</div>
+<div>
+
 ```python
-# Ret is boolean value, frame is an actual image
-ret, frame = cap.read() 
-# Store tracking results 
-results = model.track(frame, conf=0.7, persist=True) 
-out.write(frame) 
-# Checks if there are any boxes saved
+results = model.track(frame, conf=0.4, persist=True) 
 if results[0].boxes is not None: 
     boxes = results[0].boxes 
-    if hasattr(boxes, 'cls'):
-        class_names = results[0].names
+    if hasattr(boxes, 'cls'): 
+        class_names = results[0].names 
         for i, cls_id in enumerate(boxes.cls): 
             cls_id = int(cls_id) 
             class_name = class_names[cls_id] 
 ```
-
-----
-
-# Tracking mit OpenCV: Position Erfassen 
- 
-Enthält der Erkannte Frame eine Klasse `sports ball`, so wird...
-- die Position erfasst
-- der Mittelpunkt des Balls berechnet
 ```python
 if class_name == 'sports ball': 
     box = boxes.xyxy[i].cpu().numpy() 
     x1, y1, x2, y2 = box 
-    cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2) 
     center_x = int((x1 + x2) / 2) 
     center_y = int((y1 + y2) / 2)
-    cv2.circle(frame, (center_x, center_y), 4, (0, 0, 255), -1) 
-    ball_coordinates.append([frame_number, center_x, center_y])
+    coord_at_frame = [frame_number, center_x, center_y]
+    ball_coordinates.append(coord_at_frame)
     track_id = 0  # Default value
     if hasattr(boxes, 'id') and boxes.id is not None:
         try:
@@ -297,39 +325,20 @@ if class_name == 'sports ball':
             track_id = 0
 ```
 
-----
-
-# Tracking mit OpenCV: Ballflugbahn speichern
-
-- Speichern der einzelnen Punkte in in einer Liste
-- Zeichnen der Flugbahn
-```python
-# Add point to trajectory
-if track_id not in ball_trajectories:
-    ball_trajectories[track_id] = []
-    
-ball_trajectories[track_id].append((center_x, center_y))
-# Draw trajectory line
-if len(ball_trajectories[track_id]) > 1:
-    for i in range(1, len(ball_trajectories[track_id])):
-        # Draw line from previous point to current point
-        cv2.line(frame, 
-            ball_trajectories[track_id][i-1], 
-            ball_trajectories[track_id][i], 
-            (255, 0, 0), 2)
-```
+</div>
+</div>
 
 ----
 
-# Analyse der Flugbahn
+![](./assets/var-ai-opencv-tracking.gif)
 
 <!--
-Schaubild der ungefilterten Bildpunkte im Koordinatensystem anzeigen
+Gif mit Box Flugbahn
 -->
 
 ----
 
-![bg right:40% height:80%](./assets/var-ai-points-between-frames-combined.png)
+![bg right:35% width:400px](./assets/var-ai-points-between-frames-combined.png)
 
 # Ausreißer entfernen
 
@@ -361,8 +370,7 @@ Schaubild der gefilterten Bildpunkte im Koordinatensystem anzeigen
 
 ----
 
-![bg right:33% vertical height:40%](./assets/var-ai-rdp-simplification.png)
-
+![bg right:33% width:400px](./assets/var-ai-rdp-simplification.png)
 
 # Vereinfachen der Flugbahn
 
@@ -372,7 +380,7 @@ Schaubild der gefilterten Bildpunkte im Koordinatensystem anzeigen
 - **Vorteile der Vereinfachung**:
     - Keine aufwendige Berechnung der Winkel zwischen den Geraden!
     - Vergleich zw. Hand & Ball muss nur an 3 Punkten vorgenommen werden
- 
+
 <!--
 Schaubild der Vereinfachung
 
@@ -390,11 +398,19 @@ simplified_rdp = rdp(points, epsilon=10)
 
 ----
 
-![bg right:20% height:80%](./assets/pose-keypoints.png)
+# Pose-Estimation: Handgelenk & Ellbogen erfassen
 
-# Erfassen von Handgelenk & Ellbogen
+<div class="columns">
+<div>
 
-Definieren relevanter Keypoints:
+- Definieren relevanter Keypoints
+- Erfassen & Speichern der Keypoints für späteren Vergleich
+
+![center](./assets/pose-keypoints.png)
+ 
+</div>
+<div>
+
 ```python
 keypoint_indices = {
     'left_elbow': 7,
@@ -404,7 +420,6 @@ keypoint_indices = {
 }
 ```
 
-Erfassen & Speichern der Keypoints für späteren Vergleich:
 ```python
 for person_idx, person_kpts in enumerate(keypoints):
     for part_name, part_idx in keypoint_indices.items():
@@ -420,6 +435,12 @@ for person_idx, person_kpts in enumerate(keypoints):
                 'confidence': conf
             })
 ```
+
+</div>
+</div>
+
+<!--
+-->
 
 ----
 
@@ -444,6 +465,9 @@ for _, row in frame_points.iterrows():
             'distance': distance
         })
 ```
+----
+
+![](./assets/var-ai-handplay-detected.jpg)
 
 ----
 
