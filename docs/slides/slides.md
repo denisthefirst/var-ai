@@ -300,7 +300,8 @@ einbinden kann. Somit hat man persistenten Speicher auf dem man seine Datensätz
 abspeichern kann.
 -->
 
-----
+<!--
+Kann das nicht mehr reproduzieren:
 
 # `imgsz`: 640 vs. 1280
 
@@ -311,6 +312,7 @@ abspeichern kann.
 **Contra 640**:
 - Bessere generalisierung führte zu geringerer Präzision
 - Informationsverlust (Muster des Balls ging verloren)
+-->
 
 <!--
 Ich ziehe jetzt hier schonmal einige Erkenntnisse aus dem Training vor, verzeiht mir also
